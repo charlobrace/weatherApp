@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+
+    <!-- Bootstrap -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+  </head>
+  <body>
+    <h1>Displaying weather for New York, New York</h1>
+
+    <div class="container">
+    	<div class="row">
+    		<div class="col-md-2"></div>
+    		<div class="col-md-7" style="border: 2px solid black">
+    			<img id="icon_img" src="/images/sunny.png" class="img-circle" style="width: 20%; height: 20%; display: inline; padding: 20px">
+    			<p id="curr_weather" style="display: inline; font-size: 20px"></p>
+    		</div>
+    		<div class="col-md-3">
+    			<h3> <span class="label label-default">Choose an API:</span></h3>
+    			<br>
+
+    			<form id="chooseAPI">
+    				<div class="radio">
+    					<label>
+    						<input type="radio" name="APIChooser" id="Forecast.io" value="Forecast.io" checked>
+    						Forecast.io
+    					</label>
+    				</div>
+    				<div class="radio">
+    					<label>
+    						<input type="radio" name="APIChooser" id="WeatherUnderground" value="WeatherUnderground">
+    						WeatherUnderground
+    					</label>
+    				</div>
+    			</form>
+    		</div>
+    	</div>
+    	<h3>7-Day Forecast</h3>
+    	<div class="row" style="margin-top: 30px">
+    		<div class="col-md-1"></div>
+    		<div class="col-md-1" style="border: 1px solid black; margin-right: 30px">
+    			<h4 id="day0"></h4>
+    			<h6 id="min0"></h6>
+    			<h6 id="max0"></h6>
+    		</div>
+    		<div class="col-md-1" style="border: 1px solid black; margin-right: 30px">
+    			<h4 id="day1"></h4>
+    			<h6 id="min1"></h6>
+    			<h6 id="max1"></h6>
+    		</div>
+    		<div class="col-md-1" style="border: 1px solid black; margin-right: 30px">
+    			<h4 id="day2"></h4>
+    			<h6 id="min2"></h6>
+    			<h6 id="max2"></h6>
+    		</div>
+    		<div class="col-md-1" style="border: 1px solid black; margin-right: 30px">
+    			<h4 id="day3"></h4>
+    			<h6 id="min3"></h6>
+    			<h6 id="max3"></h6>
+    		</div>
+    		<div class="col-md-1" style="border: 1px solid black; margin-right: 30px">
+    			<h4 id="day4"></h4>
+    			<h6 id="min4"></h6>
+    			<h6 id="max4"></h6>
+    		</div>
+    		<div class="col-md-1" style="border: 1px solid black; margin-right: 30px">
+    			<h4 id="day5"></h4>
+    			<h6 id="min5"></h6>
+    			<h6 id="max5"></h6>
+    		</div>
+    		<div class="col-md-1" style="border: 1px solid black">
+    			<h4 id="day6"></h4>
+    			<h6 id="min6"></h6>
+    			<h6 id="max6"></h6>
+    		</div>
+    		<div class="col-md4"></div>
+    	</div>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/socket.io.js"></script>
+    <script src="/javascripts/weatherIcon.js"></script>
+    <script src="/javascripts/weatherApp.js"></script>
+  </body>
+</html>
