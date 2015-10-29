@@ -1,12 +1,15 @@
+// Global variables
 var socket = io('http://localhost:3000');
 var curr_api = "Forecast.io";
 var APIKey_WU = '237e4187f131fdd8';
 var WEEKLENGTH = 7;
 
+// Socket event when Forecast.io data is sent
 socket.on('weather data', function(data) {
 	setWeather(data, 'Forecast.io');
 })
 
+// When the page loads, load correct weather info
 $(document).ready(function() {
 	if (curr_api == 'Forecast.io') {
 		socket.emit("get weather", { API: curr_api });
@@ -16,6 +19,9 @@ $(document).ready(function() {
 	
 });
 
+// When an API button is selected, do the appropriate action for that API
+// Forecast.io uses a Node.js plugin, so needs to get data from socket
+// WeatherUnderground uses an Ajax call
 $("#chooseAPI").change(function() {
 	var selected = $('input[name=APIChooser]:checked', '#chooseAPI').val();
 	curr_api = selected;
@@ -26,6 +32,7 @@ $("#chooseAPI").change(function() {
 	}
 });
 
+// Funtion to set wether for given API with data (if relevent)
 function setWeather(data, api) {
 	if (api == 'Forecast.io') {
 		var temp_str = "Currently, it is: " + data.curr.temp + " &#186F";
@@ -41,6 +48,7 @@ function setWeather(data, api) {
 			document.getElementById(max_str).innerHTML = 'High: ' + Math.round(data.daily[i].maxTemp);
 		}
 	} else if (api == 'WeatherUnderground') {
+		// Make two ajax calls: one for current conditions and one for the forecast
 		$.ajax({
 		  url : "http://api.wunderground.com/api/" + APIKey_WU + "/geolookup/forecast10day/q/NY/NewYork.json",
 		  dataType : "jsonp",
@@ -56,9 +64,7 @@ function setWeather(data, api) {
 			document.getElementById(min_str).innerHTML = 'Low: ' + Math.round(forecastArray[i].low.fahrenheit);
 			document.getElementById(max_str).innerHTML = 'High: ' + Math.round(forecastArray[i].high.fahrenheit);
 		  }
-		  
 		}
-
  	 	});
 		$.ajax({
 		  url : "http://api.wunderground.com/api/" + APIKey_WU + "/geolookup/conditions/q/NY/NewYork.json",
@@ -88,6 +94,9 @@ function picIconForForecastIO(icon) {
 		case "clear-day":
 			picStr = "/images/sunny.png";
 			break;
+		case "clear-night":
+			picStr = "/images/clear_night.png";
+			break;
 		case "partly-cloudy-day":
 			picStr = "/images/mostly_sunny.png";
 			break;
@@ -106,6 +115,9 @@ function picIconForForecastIO(icon) {
 		case "fog": 
 			picStr = "/images/fog.png";
 			break;
+		case "cloudy":
+			picStr = "/images/cloudy.png";
+			break;
 		default:
 			picStr = "/images/sunny.png";
 			break;
@@ -115,16 +127,30 @@ function picIconForForecastIO(icon) {
 }
 
 function picIconForWeatherUnderground(icon) {
+	// Get the correct image for Weather Underground
 	var picStr = "";
 	switch(icon) {
 		case "Partly Cloudy":
-			picStr = "/images/mostly_sunny";
+			picStr = "/images/mostly_sunny.png";
+			break;
+		case "Overcast":
+			picStr = "/images/cloudy.png";
 			break;
 		case "Light Rain":
 			picStr = "/images/rainy.png";
 			break;
 		case "Rain":
 			picStr = "/images/rainy.png";
+			break;
+		case "Sunny":
+			picStr = "/images/sunny.png";
+			break;
+		case "Overcast":
+			picStr = "/images/cloudy.png";
+			break;
+		case "Cloudy":
+			picStr = "/images/cloudy.png";
+			break;
 		default:
 			picStr = "/images/sunny.png";
 			break;

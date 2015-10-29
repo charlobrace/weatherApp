@@ -3,14 +3,13 @@ var router = express.Router();
 var Forecast = require('forecast.io');
 var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
+// Declare the variables needed for Forecast.io
+var LAT = 40.730610; // Latitude for New York, NY
+var LON = -73.935342; // Longitude for New York, NY
 var options = {
   APIKey: '809c5f3d3ad4092f797d00da48472dc6'
 };
-
 var forecast = new Forecast(options);
-
-var LAT = 40.730610;
-var LON = -73.935342;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -18,6 +17,7 @@ router.get('/', function(req, res, next) {
 });
 
 function getWeather(latitude, longitude, API, socket) {
+	// Define the JSON format for the data to be sent
 	var weatherData = {
 		curr: {
 			temp: 0,
@@ -27,6 +27,7 @@ function getWeather(latitude, longitude, API, socket) {
 		summary: ""
 	};
 
+	// Double check it is the correct API
 	if (API == 'Forecast.io') {
 		console.log("In Forecast.io");
 		forecast.get(LAT, LON, function(err, res, data) {
@@ -52,8 +53,7 @@ function getWeather(latitude, longitude, API, socket) {
 			}
 			socket.emit('weather data', weatherData);
 		});
-	}
-	
+	} 
 }
 
 module.exports = function(io) {
@@ -62,6 +62,8 @@ module.exports = function(io) {
 		console.log('A user connected');
 		socket.emit('news', 'Hey there!');
 
+		// This is where the socket event from the client is received
+		// Call the function that will get the appropriate data
 		socket.on("get weather", function(data) {
 			console.log('API: ' + data.API);
 			getWeather(LAT, LON, data.API, socket);
