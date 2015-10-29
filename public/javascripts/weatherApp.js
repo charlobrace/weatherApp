@@ -1,14 +1,9 @@
 var socket = io('http://localhost:3000');
 var curr_api = "Forecast.io";
 var APIKey_WU = '237e4187f131fdd8';
-
-socket.on('news', function(data) {
-	alert(data);
-	socket.emit('received', 'Got it!');
-});
+var WEEKLENGTH = 7;
 
 socket.on('weather data', function(data) {
-	alert('Weather data!\ntemp: ' + data.curr.temp);
 	setWeather(data, 'Forecast.io');
 })
 
@@ -23,7 +18,6 @@ $(document).ready(function() {
 
 $("#chooseAPI").change(function() {
 	var selected = $('input[name=APIChooser]:checked', '#chooseAPI').val();
-	alert(selected);
 	curr_api = selected;
 	if (curr_api == 'Forecast.io') {
 		socket.emit("get weather", { API: curr_api });
@@ -36,8 +30,9 @@ function setWeather(data, api) {
 	if (api == 'Forecast.io') {
 		var temp_str = "Currently, it is: " + data.curr.temp + " &#186F";
 		document.getElementById("curr_weather").innerHTML = temp_str; 
+		document.getElementById("summary").innerHTML = "Summary: " + data.summary;
 		picIconForForecastIO(data.curr.icon);
-		for (var i = 0; i < (data.daily.length - 1); i++) {
+		for (var i = 0; i < WEEKLENGTH; i++) {
 			var id_str = "day" + i;
 			var min_str = "min" + i;
 			var max_str = "max" + i;
@@ -53,7 +48,7 @@ function setWeather(data, api) {
 		  var location = parsed_json['location']['city'];
 		  
 		  var forecastArray = parsed_json['forecast']['simpleforecast']['forecastday'];
-		  for (var i = 0; i < (forecastArray.length - 1); i++) {
+		  for (var i = 0; i < WEEKLENGTH; i++) {
 		  	var id_str = "day" + i;
 			var min_str = "min" + i;
 			var max_str = "max" + i;
@@ -71,9 +66,13 @@ function setWeather(data, api) {
 		  success : function(parsed_json) {
 		  var location = parsed_json['location']['city'];
 		  var temp_f = parsed_json['current_observation']['temp_f'];
+		  var weather = parsed_json['current_observation']['weather'];
+		  var weather_str = "Summary: " + weather;
+		  picIconForWeatherUnderground(weather);
 		  
 		  temp_str = "Currently, it is: " + temp_f + " &#186F";
 		  document.getElementById("curr_weather").innerHTML = temp_str; 
+		  document.getElementById("summary").innerHTML = weather_str;
 		}
 		});
 	}
@@ -98,9 +97,38 @@ function picIconForForecastIO(icon) {
 		case "partly-cloudy-night":
 			picStr = "/images/partly_cloudy_night.png";
 			break;
+		case "snow":
+			picStr = "/images/snow.png";
+			break;
+		case "sleet":
+			picStr = "/images/rainy.png";
+			break;
+		case "fog": 
+			picStr = "/images/fog.png";
+			break;
 		default:
 			picStr = "/images/sunny.png";
 			break;
 	}
 	document.getElementById("icon_img").src = picStr;
+	document.getElementById("icon_img").alt = icon;
+}
+
+function picIconForWeatherUnderground(icon) {
+	var picStr = "";
+	switch(icon) {
+		case "Partly Cloudy":
+			picStr = "/images/mostly_sunny";
+			break;
+		case "Light Rain":
+			picStr = "/images/rainy.png";
+			break;
+		case "Rain":
+			picStr = "/images/rainy.png";
+		default:
+			picStr = "/images/sunny.png";
+			break;
+	}
+	document.getElementById("icon_img").src = picStr;
+	document.getElementById("icon_img").alt = icon;
 }

@@ -23,7 +23,8 @@ function getWeather(latitude, longitude, API, socket) {
 			temp: 0,
 			wind_speed: 0,
 			icon: 0
-		}, daily: []
+		}, daily: [],
+		summary: ""
 	};
 
 	if (API == 'Forecast.io') {
@@ -33,6 +34,7 @@ function getWeather(latitude, longitude, API, socket) {
 			weatherData.curr.temp = data.currently.temperature;
 			weatherData.curr.wind_speed = data.currently.windSpeed;
 			weatherData.curr.icon = data.currently.icon;
+			weatherData.summary = data.currently.summary;
 
 			console.log('temp: ' + data.currently.temperature);
 			console.log('wind speed: ' + data.currently.windSpeed);
